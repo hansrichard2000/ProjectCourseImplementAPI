@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.uc.projectcourseapi.R;
+import com.uc.projectcourseapi.view.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,5 +83,23 @@ public class RegisterFragment extends Fragment {
 //                getActivity().finish();
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
     }
 }
