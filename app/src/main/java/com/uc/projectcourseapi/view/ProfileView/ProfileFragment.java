@@ -7,12 +7,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.uc.projectcourseapi.R;
+import com.uc.projectcourseapi.helper.SharedPreferenceHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +27,12 @@ import com.uc.projectcourseapi.R;
  */
 public class ProfileFragment extends Fragment {
     Toolbar toolbar;
+
+    Button btn_logout;
+
+    private ProfileViewModel profileViewModel;
+    private SharedPreferenceHelper helper;
+    private static final String TAG = "ProfileFragment";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,5 +87,29 @@ public class ProfileFragment extends Fragment {
         toolbar = getActivity().findViewById(R.id.toolbar_main);
         toolbar.setTitle("Profiles");
         toolbar.setTitleTextColor(Color.WHITE);
+
+        helper = SharedPreferenceHelper.getInstance(requireActivity());
+        profileViewModel = new ViewModelProvider(getActivity()).get(ProfileViewModel.class);
+        profileViewModel.init(helper.getAccessToken());
+
+        btn_logout = view.findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(view1 -> {
+            if (view1.getId() == R.id.btn_logout){
+                profileViewModel.logout().observe(requireActivity(), s -> {
+                    if (!s.isEmpty()){
+                        helper.clearPref();
+                        NavDirections actions = ProfileFragmentDirections.actionProfileFragment2ToLoginFragment();
+                        Navigation.findNavController(view1).navigate(actions);
+                        Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        getActivity().getViewModelStore().clear();
     }
 }
