@@ -60,8 +60,8 @@ public class AuthRepository {
         return tokenResponse;
     }
 
-    public MutableLiveData<RegisterResponse> register(String name, String email, String password, String password_confirmation){
-        MutableLiveData<RegisterResponse> registerResponse = new MutableLiveData<>();
+    public MutableLiveData<String> register(String name, String email, String password, String password_confirmation){
+        MutableLiveData<String> registerResponse = new MutableLiveData<>();
         apiService.register(name, email, password, password_confirmation).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
@@ -72,9 +72,8 @@ public class AuthRepository {
                             try{
                                 Log.d(TAG, "onResponse: "+response.body().getMessage());
                                 JSONObject object = new JSONObject(new Gson().toJson(response.body()));
-                                String msg = object.getString("message");
-
-                                registerResponse.postValue(response.body());
+                                String msg = object.getString("email");
+                                registerResponse.postValue(msg);
                             }catch (JSONException e){
                                 e.printStackTrace();
                             }

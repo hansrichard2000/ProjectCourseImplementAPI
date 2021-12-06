@@ -116,9 +116,9 @@ public class RegisterFragment extends Fragment {
                         if (registerResponse != null){
                             NavDirections actions = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment();
                             Navigation.findNavController(view).navigate(actions);
-                            Toast.makeText(requireActivity(), "Register Success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), registerResponse, Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(requireActivity(), "Regsiter Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireActivity(), registerResponse, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }else{
