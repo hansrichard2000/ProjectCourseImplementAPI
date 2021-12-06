@@ -109,7 +109,9 @@ public class DetailCourseFragment extends Fragment {
     private Observer<Course> showCourseDetail = new Observer<Course>() {
         @Override
         public void onChanged(Course course) {
+            Log.d(TAG, "course: "+course);
             Course.Courses resultCourse= course.getCourses().get(0);
+            Log.d(TAG, "resultCourse: "+resultCourse);
             if (course == null){
                 detailCourseCode.setText("Unknown");
                 detailCourseTitle.setText("Unknown");

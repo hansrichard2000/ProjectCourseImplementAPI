@@ -11,12 +11,14 @@ public class RegisterResponse implements Parcelable {
     private String email;
     private String password;
     private String password_confirmation;
+    private String message;
 
     protected RegisterResponse(Parcel in) {
         name = in.readString();
         email = in.readString();
         password = in.readString();
         password_confirmation = in.readString();
+        message = in.readString();
     }
 
     public static final Creator<RegisterResponse> CREATOR = new Creator<RegisterResponse>() {
@@ -68,6 +70,14 @@ public class RegisterResponse implements Parcelable {
         this.password_confirmation = password_confirmation;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -79,5 +89,6 @@ public class RegisterResponse implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(password);
         parcel.writeString(password_confirmation);
+        parcel.writeString(message);
     }
 }

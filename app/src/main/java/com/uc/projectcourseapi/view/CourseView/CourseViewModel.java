@@ -40,4 +40,10 @@ public class CourseViewModel extends AndroidViewModel {
     }
     public LiveData<Course> getResultCourseDetail(){return resultCourseDetail;}
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Log.d(TAG, "onCleared: ");
+        courseRepository.resetInstance();
+    }
 }

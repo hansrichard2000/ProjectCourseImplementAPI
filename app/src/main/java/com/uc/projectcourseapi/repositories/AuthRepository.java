@@ -4,9 +4,13 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
 import com.uc.projectcourseapi.model.RegisterResponse;
 import com.uc.projectcourseapi.model.TokenResponse;
 import com.uc.projectcourseapi.retrofit.RetrofitService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,8 +69,15 @@ public class AuthRepository {
                     Log.d(TAG, "onResponse: "+response.code());
                     if (response.code() == 200){
                         if (response.body() != null){
-                            Log.d(TAG, "onResponse: "+response.body());
-                            registerResponse.postValue(response.body());
+                            try{
+                                Log.d(TAG, "onResponse: "+response.body().getMessage());
+                                JSONObject object = new JSONObject(new Gson().toJson(response.body()));
+                                String msg = object.getString("message");
+
+                                registerResponse.postValue(response.body());
+                            }catch (JSONException e){
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }else {
