@@ -10,12 +10,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.uc.projectcourseapi.R;
 import com.uc.projectcourseapi.helper.SharedPreferenceHelper;
@@ -30,6 +34,8 @@ import com.uc.projectcourseapi.view.CourseView.CourseViewModel;
 public class DetailCourseFragment extends Fragment {
     Toolbar toolbar;
     TextView detailCourseCode, detailCourseTitle, detailCourseLecturer, detailCourseSks, detailCourseDesc;
+
+    Button btn_edit, btn_delete;
 
     private static final String TAG = "DetailCourseFragment";
 
@@ -96,6 +102,8 @@ public class DetailCourseFragment extends Fragment {
         detailCourseLecturer = view.findViewById(R.id.detail_course_lecturer);
         detailCourseSks = view.findViewById(R.id.detail_course_sks);
         detailCourseDesc = view.findViewById(R.id.detail_course_description);
+        btn_edit = view.findViewById(R.id.btn_edit);
+        btn_delete = view.findViewById(R.id.btn_delete);
 
         courseViewModel = new ViewModelProvider(getActivity()).get(CourseViewModel.class);
         helper = SharedPreferenceHelper.getInstance(requireActivity());
@@ -104,6 +112,25 @@ public class DetailCourseFragment extends Fragment {
         Log.d(TAG, "course_code: "+code);
         courseViewModel.getCoursesDetail(code);
         courseViewModel.getResultCourseDetail().observe(getActivity(), showCourseDetail);
+
+        btn_edit.setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("course_code", code);
+            Navigation.findNavController(view1).navigate(R.id.action_detailCourseFragment_to_addCourseFragment, bundle);
+        });
+
+        btn_delete.setOnClickListener(view12 -> {
+            courseViewModel.deleteCourse(code).observe(requireActivity(), s -> {
+                if (s != null){
+                    NavDirections actions = DetailCourseFragmentDirections.actionDetailCourseFragmentToCourseFragment2();
+                    Navigation.findNavController(view12).navigate(actions);
+                    Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(requireActivity(), "Failed to Delete", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        });
     }
 
     private Observer<Course> showCourseDetail = new Observer<Course>() {

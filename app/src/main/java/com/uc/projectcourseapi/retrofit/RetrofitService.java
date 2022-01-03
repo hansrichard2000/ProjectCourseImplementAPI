@@ -67,5 +67,9 @@ public class RetrofitService {
 
     public Call<Course.Courses> createCourses(Course.Courses courses){return api.createCourses(courses);}
 
+    public Call<Course.Courses> editCourses(String code, Course.Courses courses){return api.editCourses(code, courses);}
+
+    public Call<Course> deleteCourses(String code){return api.deleteCourses(code);}
+
     public Call<JsonObject> logout() {return api.logout();}
 }

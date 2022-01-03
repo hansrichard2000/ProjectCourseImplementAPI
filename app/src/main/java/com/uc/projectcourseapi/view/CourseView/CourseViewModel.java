@@ -40,6 +40,11 @@ public class CourseViewModel extends AndroidViewModel {
     }
     public LiveData<Course> getResultCourseDetail(){return resultCourseDetail;}
 
+    //== Begin of view model to delete specific course
+    public LiveData<String> deleteCourse(String code){
+        return courseRepository.deleteCourses(code);
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();
